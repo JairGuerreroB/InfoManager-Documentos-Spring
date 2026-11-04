@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfoManager System · Gestión de documentos</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="im-shell">
+  <aside class="im-sidebar">
+    <div class="brand"><i class="bi bi-diagram-3-fill"></i> InfoManager</div>
+    <a href="dashboard.html" class="nav-item"><i class="bi bi-house-door"></i> Panel</a>
+    <a href="usuarios.html" class="nav-item"><i class="bi bi-people"></i> Usuarios</a>
+    <a href="documentos.html" class="nav-item active"><i class="bi bi-file-earmark-text"></i> Documentos</a>
+    <a href="reportes.html" class="nav-item"><i class="bi bi-bar-chart"></i> Reportes</a>
+    <a href="perfil.html" class="nav-item"><i class="bi bi-person-circle"></i> Perfil</a>
+    <div class="nav-footer">
+      <a href="guia_estilos.html" class="nav-item" style="padding-left:0;"><i class="bi bi-palette2"></i> Guía de estilos</a>
+      <a href="login.html" class="nav-item" style="padding-left:0;"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+    </div>
+  </aside>
+
+  <div class="im-main">
+    <header class="im-topbar">
+      <button class="im-menu-toggle" aria-label="Abrir menú"><i class="bi bi-list"></i></button>
+      <h1 class="page-title">Gestión de documentos</h1>
+      <div class="im-topbar-right">
+        <button class="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"><i class="bi bi-moon-stars"></i></button>
+        <div class="im-notif" title="Notificaciones">
+          <i class="bi bi-bell"></i>
+          <span class="dot">3</span>
+        </div>
+        <div class="im-user-menu">
+          <div class="user-chip">
+            <span class="text-muted">Ana Martínez · Administradora</span>
+            <div class="avatar">AM</div>
+          </div>
+          <div class="user-dropdown">
+            <a href="perfil.html"><i class="bi bi-person"></i> Ver perfil</a>
+            <a href="#"><i class="bi bi-gear"></i> Configuración</a>
+            <hr>
+            <a href="login.html"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="im-content">
+      <nav class="im-breadcrumb"><a href="dashboard.html">Panel administrativo</a><span class="sep">/</span><span class="current">Documentos</span></nav>
+      <div class="block">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <div class="d-flex flex-wrap gap-2">
+            <!-- Las categorías se cargan desde la base de datos (GET /api/categorias) -->
+            <select class="form-select" id="filtroCategoria" style="max-width:180px;" aria-label="Filtrar por categoría">
+              <option value="">Todas las categorías</option>
+            </select>
+            <select class="form-select" id="filtroVigencia" style="max-width:180px;" aria-label="Filtrar por vigencia">
+              <option value="">Toda vigencia</option>
+              <option value="vigente">Vigentes</option>
+              <option value="por_vencer">Por vencer</option>
+              <option value="vencido">Vencidos</option>
+              <option value="sin_vencimiento">Sin vencimiento</option>
+            </select>
+            <div class="input-group" style="max-width:280px;">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control" id="buscarDocumento" placeholder="Buscar documento..." aria-label="Buscar documento">
+            </div>
+          </div>
+          <button class="btn btn-im-primary" id="btnSubirDocumento"><i class="bi bi-upload me-1"></i> Subir documento</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" id="tablaDocumentos">
+            <thead class="table-light">
+              <tr><th>Documento</th><th>Categoría</th><th>Subido por</th><th>Fecha</th><th>Vence</th><th>Estado</th><th class="text-end">Acciones</th></tr>
+            </thead>
+            <!-- Las filas las genera assets/documentos.js con los datos de la API -->
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="documentosVacio">
+          <i class="bi bi-search"></i>
+          No hay documentos para mostrar.
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Panel modal: subir un documento nuevo o editar uno existente -->
+<div class="im-modal-backdrop" id="modalDocumento">
+  <div class="im-modal" style="max-height:90vh; overflow-y:auto;">
+    <h3 id="modalDocumentoTitulo"><i class="bi bi-upload me-1"></i> Subir documento</h3>
+    <form id="formDocumento" novalidate>
+      <div class="mb-3">
+        <label class="form-label small fw-semibold" for="docTitulo">Título</label>
+        <input type="text" class="form-control" id="docTitulo" maxlength="100" required>
+        <div class="field-error">Ingresa el título del documento.</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-semibold" for="docDescripcion">Descripción (opcional)</label>
+        <input type="text" class="form-control" id="docDescripcion" maxlength="255">
+        <div class="field-error"></div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-semibold" for="docCategoria">Categoría</label>
+        <select class="form-select" id="docCategoria" required></select>
+        <div class="field-error">Selecciona una categoría.</div>
+      </div>
+      <div class="mb-3 solo-nuevo">
+        <label class="form-label small fw-semibold" for="docUsuario">Subido por</label>
+        <select class="form-select" id="docUsuario"></select>
+        <div class="field-error">Selecciona quién sube el documento.</div>
+      </div>
+      <div class="mb-3 solo-nuevo">
+        <label class="form-label small fw-semibold" for="docArchivo">Archivo (máximo 10 MB)</label>
+        <input type="file" class="form-control" id="docArchivo"
+               accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.png,.jpg,.jpeg">
+        <div class="field-error">Selecciona el archivo.</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-semibold" for="docVencimiento">Fecha de vencimiento (opcional)</label>
+        <input type="date" class="form-control" id="docVencimiento">
+        <div class="form-text">Déjala vacía si el documento no vence.</div>
+        <div class="field-error"></div>
+      </div>
+      <div class="mb-1 solo-edicion" hidden>
+        <label class="form-label small fw-semibold" for="docEstado">Estado</label>
+        <select class="form-select" id="docEstado">
+          <option value="activo">Activo</option>
+          <option value="archivado">Archivado</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="btnCancelarDoc">Cancelar</button>
+        <button type="submit" class="btn btn-im-primary btn-sm" id="btnGuardarDoc">Guardar documento</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="assets/app.js"></script>
+<script src="assets/documentos.js"></script>
+</body>
+</html>

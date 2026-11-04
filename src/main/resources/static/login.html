@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfoManager System · Inicio de sesión</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<button class="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema" style="position:fixed; top:1rem; right:1rem; z-index:10; background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.3); color:#fff;">
+  <i class="bi bi-moon-stars"></i>
+</button>
+
+<div class="login-wrap">
+  <div class="brand-panel">
+    <i class="bi bi-diagram-3-fill" style="font-size:3rem;opacity:.9;"></i>
+    <h1>InfoManager<br>System</h1>
+    <p>Plataforma centralizada para la gestión de usuarios, documentos y reportes administrativos.</p>
+    <div class="feature"><i class="bi bi-shield-check"></i> Acceso seguro por roles</div>
+    <div class="feature"><i class="bi bi-folder2-open"></i> Gestión documental centralizada</div>
+    <div class="feature"><i class="bi bi-bar-chart-line"></i> Reportes en tiempo real</div>
+  </div>
+
+  <div class="login-panel">
+    <div class="login-card">
+      <h3 class="mb-1">Iniciar sesión</h3>
+      <p class="text-muted mb-4">Ingresa tus credenciales para acceder al panel administrativo.</p>
+
+      <form id="loginForm" novalidate>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Correo electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input type="email" class="form-control" id="loginEmail" value="ana.martinez@infomanager.com" required>
+          </div>
+          <div class="field-error">Ingresa un correo electrónico válido.</div>
+        </div>
+        <div class="mb-2">
+          <label class="form-label fw-semibold">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" class="form-control" id="loginPassword" value="12345678" required>
+            <button class="btn btn-outline-secondary toggle-password" type="button" tabindex="-1" aria-label="Mostrar contraseña">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+          <div class="field-error">La contraseña es obligatoria.</div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" checked>
+            <label class="form-check-label small text-muted">Recordarme</label>
+          </div>
+          <a href="#" class="small text-decoration-none" style="color:#2E5C8A;">¿Olvidaste tu contraseña?</a>
+        </div>
+        <!-- Navegación funcional: valida los campos con JS y, si son correctos, dirige al panel administrativo -->
+        <button type="submit" class="btn btn-login btn-lg w-100 text-white">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
+        </button>
+      </form>
+
+      <div class="divider"><span>InfoManager System</span></div>
+      <p class="text-center text-muted small mb-0">Proyecto formativo · Análisis y Desarrollo de Software</p>
+    </div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  // Mostrar / ocultar contraseña
+  var toggleBtn = document.querySelector('.toggle-password');
+  var pwdInput = document.getElementById('loginPassword');
+  if (toggleBtn && pwdInput) {
+    toggleBtn.addEventListener('click', function () {
+      var isPwd = pwdInput.type === 'password';
+      pwdInput.type = isPwd ? 'text' : 'password';
+      toggleBtn.innerHTML = isPwd ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+    });
+  }
+
+  // Validación del formulario de inicio de sesión
+  var loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var emailOk = imValidateField(document.getElementById('loginEmail'));
+      var pwdOk = imValidateField(document.getElementById('loginPassword'));
+      if (emailOk && pwdOk) {
+        imShowToast('Inicio de sesión correcto. Redirigiendo…', 'success');
+        setTimeout(function () { window.location.href = 'dashboard.html'; }, 700);
+      } else {
+        imShowToast('Revisa los campos marcados en rojo.', 'danger');
+      }
+    });
+  }
+</script>
+</body>
+</html>

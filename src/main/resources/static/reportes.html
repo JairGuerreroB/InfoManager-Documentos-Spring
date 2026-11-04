@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfoManager System · Reportes</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="im-shell">
+  <aside class="im-sidebar">
+    <div class="brand"><i class="bi bi-diagram-3-fill"></i> InfoManager</div>
+    <a href="dashboard.html" class="nav-item"><i class="bi bi-house-door"></i> Panel</a>
+    <a href="usuarios.html" class="nav-item"><i class="bi bi-people"></i> Usuarios</a>
+    <a href="documentos.html" class="nav-item"><i class="bi bi-file-earmark-text"></i> Documentos</a>
+    <a href="reportes.html" class="nav-item active"><i class="bi bi-bar-chart"></i> Reportes</a>
+    <a href="perfil.html" class="nav-item"><i class="bi bi-person-circle"></i> Perfil</a>
+    <div class="nav-footer">
+      <a href="guia_estilos.html" class="nav-item" style="padding-left:0;"><i class="bi bi-palette2"></i> Guía de estilos</a>
+      <a href="login.html" class="nav-item" style="padding-left:0;"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+    </div>
+  </aside>
+
+  <div class="im-main">
+    <header class="im-topbar">
+      <button class="im-menu-toggle" aria-label="Abrir menú"><i class="bi bi-list"></i></button>
+      <h1 class="page-title">Reportes administrativos</h1>
+      <div class="im-topbar-right">
+        <button class="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"><i class="bi bi-moon-stars"></i></button>
+        <div class="im-notif" title="Notificaciones">
+          <i class="bi bi-bell"></i>
+          <span class="dot">3</span>
+        </div>
+        <div class="im-user-menu">
+          <div class="user-chip">
+            <span class="text-muted">Ana Martínez · Administradora</span>
+            <div class="avatar">AM</div>
+          </div>
+          <div class="user-dropdown">
+            <a href="perfil.html"><i class="bi bi-person"></i> Ver perfil</a>
+            <a href="#"><i class="bi bi-gear"></i> Configuración</a>
+            <hr>
+            <a href="login.html"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="im-content">
+      <nav class="im-breadcrumb"><a href="dashboard.html">Panel administrativo</a><span class="sep">/</span><span class="current">Reportes</span></nav>
+      <div class="row g-3">
+        <div class="col-md-7">
+          <div class="block">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="section-title mb-0">Historial de reportes</h6>
+              <button class="btn btn-im-primary btn-sm" id="btnGenerarReporte"><i class="bi bi-file-earmark-plus me-1"></i> Generar reporte</button>
+            </div>
+            <table class="table table-hover align-middle mb-0" id="tablaReportes">
+              <thead class="table-light">
+                <tr><th>Reporte</th><th>Tipo</th><th>Generado por</th><th>Fecha</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Reporte de usuarios activos</td><td><span class="badge bg-secondary">Administrativo</span></td><td>Ana Martínez</td><td>04/09/2026</td></tr>
+                <tr><td>Reporte de documentos por categoría</td><td><span class="badge bg-secondary">Estadístico</span></td><td>Ana Martínez</td><td>02/09/2026</td></tr>
+                <tr><td>Reporte mensual de actividad</td><td><span class="badge bg-secondary">Administrativo</span></td><td>Carlos Pérez</td><td>30/08/2026</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="block">
+            <h6 class="section-title">Reportes generados por mes</h6>
+            <div class="mb-2 d-flex justify-content-between small"><span>Junio</span><span class="text-muted">14</span></div>
+            <div class="im-bar-track mb-3"><div class="im-bar-fill" style="width:45%;"></div></div>
+            <div class="mb-2 d-flex justify-content-between small"><span>Julio</span><span class="text-muted">19</span></div>
+            <div class="im-bar-track mb-3"><div class="im-bar-fill" style="width:60%;"></div></div>
+            <div class="mb-2 d-flex justify-content-between small"><span>Agosto</span><span class="text-muted">24</span></div>
+            <div class="im-bar-track"><div class="im-bar-fill" style="width:80%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  var contadorReportes = 0;
+  document.getElementById('btnGenerarReporte').addEventListener('click', function () {
+    contadorReportes++;
+    var hoy = new Date();
+    var fechaTexto = String(hoy.getDate()).padStart(2, '0') + '/' + String(hoy.getMonth() + 1).padStart(2, '0') + '/' + hoy.getFullYear();
+    var tbody = document.querySelector('#tablaReportes tbody');
+    var fila = document.createElement('tr');
+    fila.innerHTML =
+      '<td>Reporte generado #' + contadorReportes + '</td>' +
+      '<td><span class="badge bg-secondary">Administrativo</span></td>' +
+      '<td>Ana Martínez</td>' +
+      '<td>' + fechaTexto + '</td>';
+    tbody.insertBefore(fila, tbody.firstChild);
+    imShowToast('Reporte generado correctamente.', 'success');
+  });
+</script>
+</body>
+</html>

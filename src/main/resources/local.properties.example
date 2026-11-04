@@ -1,0 +1,2 @@
+# Copie este archivo como local.properties (misma carpeta) y escriba su contraseña de MySQL.
+spring.datasource.password=CAMBIE_ESTA_CLAVE

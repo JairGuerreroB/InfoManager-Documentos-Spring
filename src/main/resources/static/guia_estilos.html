@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfoManager System · Guía de estilos de la interfaz</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .gs-wrap{ max-width:980px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .gs-header{ margin-bottom:2rem; }
+  .gs-header h1{ color:var(--im-blue-dark); font-weight:700; }
+  .gs-header p{ color:var(--im-gray-600); }
+  .swatch{ border-radius:var(--im-radius-md); height:76px; display:flex; align-items:flex-end; padding:.5rem .7rem; color:#fff; font-size:.78rem; font-weight:600; box-shadow:var(--im-shadow); }
+  .swatch small{ display:block; font-weight:400; opacity:.85; }
+  .gs-block{ background:#fff; border-radius:var(--im-radius-md); box-shadow:var(--im-shadow); padding:1.6rem; margin-bottom:1.8rem; }
+  .gs-block h2{ font-size:1.15rem; font-weight:700; color:var(--im-blue-dark); border-left:4px solid var(--im-blue); padding-left:.6rem; margin-bottom:1.1rem; }
+  .type-row{ display:flex; align-items:baseline; gap:1rem; padding:.5rem 0; border-bottom:1px dashed var(--im-gray-300); }
+  .type-row:last-child{ border-bottom:none; }
+  .type-row code{ margin-left:auto; color:var(--im-gray-600); font-size:.8rem; }
+  .usab-item{ display:flex; gap:.8rem; padding:.7rem 0; border-bottom:1px solid var(--im-gray-300); }
+  .usab-item:last-child{ border-bottom:none; }
+  .usab-item i{ color:var(--im-blue); font-size:1.2rem; margin-top:.1rem; }
+  .usab-item h6{ margin:0 0 .2rem; font-weight:700; color:var(--im-gray-900); }
+  .usab-item p{ margin:0; color:var(--im-gray-600); font-size:.88rem; }
+  .menu-demo{ display:flex; border-radius:var(--im-radius-md); overflow:hidden; box-shadow:var(--im-shadow); max-width:360px; }
+  .menu-demo .im-sidebar{ min-height:auto; padding:1rem 0; width:190px; flex:0 0 190px; }
+  .back-link{ font-size:.9rem; }
+</style>
+</head>
+<body>
+
+<div class="gs-wrap">
+  <div class="d-flex justify-content-between align-items-center gs-header">
+    <div>
+      <h1 class="mb-1"><i class="bi bi-palette2 me-2"></i>Guía de estilos — InfoManager System</h1>
+      <p class="mb-0">Sistema de diseño usado en la interfaz gráfica del proyecto: colores, tipografía, componentes, estados de usabilidad y patrón de menús.</p>
+    </div>
+    <a href="dashboard.html" class="back-link"><i class="bi bi-arrow-left"></i> Volver al panel</a>
+    <button class="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema" style="margin-left:.8rem;"><i class="bi bi-moon-stars"></i></button>
+  </div>
+
+  <!-- ===== COLORES ===== -->
+  <div class="gs-block">
+    <h2><i class="bi bi-droplet-half me-1"></i> Paleta de color</h2>
+    <p class="text-muted small">La paleta se basa en azul corporativo, blancos y grises, tal como se definió desde el inicio del proyecto InfoManager System, reforzando una imagen profesional y de confianza (propia de un sistema de gestión administrativa).</p>
+    <div class="row g-3 mb-3">
+      <div class="col-6 col-md-3">
+        <div class="swatch" style="background:#2E5C8A;">Primario<small>#2E5C8A</small></div>
+        <p class="small text-muted mt-1 mb-0">Botones principales, enlaces activos, marca.</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="swatch" style="background:#1F4368;">Primario oscuro<small>#1F4368</small></div>
+        <p class="small text-muted mt-1 mb-0">Menú lateral, encabezados, textos destacados.</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="swatch" style="background:#7FB3E8;color:#1F4368;">Foco / activo<small>#7FB3E8</small></div>
+        <p class="small text-muted mt-1 mb-0">Estados activos, foco de accesibilidad.</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="swatch" style="background:#EAF0F7;color:#1F4368;">Fondo suave<small>#EAF0F7</small></div>
+        <p class="small text-muted mt-1 mb-0">Hover, chips, fondos secundarios.</p>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="swatch" style="background:#198754;">Éxito<small>#198754</small></div>
+        <p class="small text-muted mt-1 mb-0">Estado "activo", confirmaciones.</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="swatch" style="background:#DC3545;">Peligro<small>#DC3545</small></div>
+        <p class="small text-muted mt-1 mb-0">Eliminar, estado "inactivo".</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="swatch" style="background:#5B6B79;">Gris texto<small>#5B6B79</small></div>
+        <p class="small text-muted mt-1 mb-0">Texto secundario, etiquetas.</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="swatch" style="background:#F4F6F9;color:#26313B;">Fondo general<small>#F4F6F9</small></div>
+        <p class="small text-muted mt-1 mb-0">Fondo base de toda la aplicación.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TIPOGRAFÍA ===== -->
+  <div class="gs-block">
+    <h2><i class="bi bi-fonts me-1"></i> Tipografía</h2>
+    <p class="text-muted small">Se utiliza la fuente del sistema (Segoe UI / Roboto / Arial) para garantizar legibilidad, buen rendimiento y consistencia entre navegadores, sin depender de fuentes externas.</p>
+    <div class="type-row"><span style="font-size:2.2rem;font-weight:700;color:var(--im-blue-dark);">Título principal</span><code>2.2rem · 700</code></div>
+    <div class="type-row"><span style="font-size:1.5rem;font-weight:700;color:var(--im-blue-dark);">Título de sección</span><code>1.5rem · 700</code></div>
+    <div class="type-row"><span style="font-size:1.15rem;font-weight:700;color:var(--im-blue-dark);">Título de pantalla</span><code>1.15rem · 700</code></div>
+    <div class="type-row"><span style="font-size:.95rem;">Texto base / párrafos</span><code>.95rem · 400</code></div>
+    <div class="type-row"><span style="font-size:.88rem;color:var(--im-gray-600);">Texto secundario</span><code>.88rem · 400</code></div>
+    <div class="type-row"><span style="font-size:.78rem;color:var(--im-gray-600);">Etiquetas / metadatos</span><code>.78rem · 400</code></div>
+  </div>
+
+  <!-- ===== COMPONENTES Y ESTADOS ===== -->
+  <div class="gs-block">
+    <h2><i class="bi bi-toggles me-1"></i> Componentes y estados de interacción</h2>
+    <p class="text-muted small">Cada componente interactivo define un estado visual de reposo, uno de interacción (hover/foco) y uno de acción (activo/presionado), para dar retroalimentación clara al usuario.</p>
+    <div class="row g-4 align-items-center">
+      <div class="col-md-6">
+        <p class="small fw-semibold mb-2">Botón primario (reposo / hover)</p>
+        <button class="btn btn-im-primary me-2">Guardar</button>
+        <span class="text-muted small">↳ pase el cursor sobre el botón para ver el estado hover</span>
+      </div>
+      <div class="col-md-6">
+        <p class="small fw-semibold mb-2">Insignias de estado</p>
+        <span class="badge bg-success me-1">Activo</span>
+        <span class="badge bg-secondary me-1">Archivado</span>
+        <span class="badge bg-danger">Inactivo</span>
+      </div>
+      <div class="col-md-6">
+        <p class="small fw-semibold mb-2">Campo de formulario (foco)</p>
+        <input type="text" class="form-control" placeholder="Haga clic para ver el estado de foco">
+      </div>
+      <div class="col-md-6">
+        <p class="small fw-semibold mb-2">Fila de tabla (hover)</p>
+        <table class="table table-hover mb-0">
+          <tbody><tr><td>Pase el cursor sobre esta fila</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== USABILIDAD ===== -->
+  <div class="gs-block">
+    <h2><i class="bi bi-person-check me-1"></i> Principios de usabilidad aplicados</h2>
+    <div class="usab-item">
+      <i class="bi bi-signpost-2"></i>
+      <div><h6>Orientación constante</h6><p>Menú lateral fijo y migas de pan en cada pantalla interna, para que el usuario siempre sepa en qué módulo se encuentra y cómo volver.</p></div>
+    </div>
+    <div class="usab-item">
+      <i class="bi bi-lightning-charge"></i>
+      <div><h6>Retroalimentación visual inmediata</h6><p>Cambios de color y sombra en botones, tarjetas y filas de tabla al pasar el cursor (hover) o interactuar, para confirmar que el elemento es interactivo.</p></div>
+    </div>
+    <div class="usab-item">
+      <i class="bi bi-universal-access"></i>
+      <div><h6>Accesibilidad</h6><p>Contraste adecuado entre texto y fondo, y un contorno de foco visible (outline) en todos los campos, botones y enlaces al navegar con teclado.</p></div>
+    </div>
+    <div class="usab-item">
+      <i class="bi bi-phone"></i>
+      <div><h6>Diseño responsivo</h6><p>El menú lateral se convierte en un menú desplegable (hamburguesa) en pantallas pequeñas, y las columnas se reorganizan automáticamente en dispositivos móviles.</p></div>
+    </div>
+    <div class="usab-item">
+      <i class="bi bi-palette"></i>
+      <div><h6>Consistencia visual</h6><p>Una única paleta de color, escala tipográfica y escala de espaciados se aplican en todas las pantallas del sistema, reduciendo la carga cognitiva del usuario.</p></div>
+    </div>
+  </div>
+
+  <!-- ===== MENÚS ===== -->
+  <div class="gs-block">
+    <h2><i class="bi bi-list-ul me-1"></i> Patrón de menús de navegación</h2>
+    <p class="text-muted small">La interfaz utiliza dos menús complementarios: un menú lateral fijo para moverse entre los módulos del sistema, y un menú desplegable de usuario para las acciones de la cuenta.</p>
+    <div class="row g-4">
+      <div class="col-md-5">
+        <div class="menu-demo">
+          <aside class="im-sidebar">
+            <div class="brand" style="font-size:.85rem;"><i class="bi bi-diagram-3-fill"></i> InfoManager</div>
+            <a href="#" class="nav-item active"><i class="bi bi-house-door"></i> Panel</a>
+            <a href="#" class="nav-item"><i class="bi bi-people"></i> Usuarios</a>
+            <a href="#" class="nav-item"><i class="bi bi-file-earmark-text"></i> Documentos</a>
+          </aside>
+        </div>
+        <p class="small text-muted mt-2 mb-0">Menú lateral: agrupa los 5 módulos principales del sistema. El ítem activo se resalta con fondo y borde izquierdo.</p>
+      </div>
+      <div class="col-md-7">
+        <div class="im-user-menu" style="display:inline-block;">
+          <div class="user-chip" style="background:var(--im-blue-light);">
+            <span class="text-muted small">Ana Martínez · Administradora</span>
+            <div class="avatar">AM</div>
+          </div>
+          <div class="user-dropdown show" style="position:static; margin-top:.6rem; box-shadow:var(--im-shadow); display:block;">
+            <a href="perfil.html"><i class="bi bi-person"></i> Ver perfil</a>
+            <a href="#"><i class="bi bi-gear"></i> Configuración</a>
+            <hr>
+            <a href="login.html"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+          </div>
+        </div>
+        <p class="small text-muted mt-2 mb-0">Menú de usuario: agrupa las acciones de la cuenta (perfil, configuración, cierre de sesión), evitando saturar el menú lateral con opciones que no son módulos del sistema.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INTERACTIVIDAD (JavaScript) ===== -->
+  <div class="gs-block">
+    <h2><i class="bi bi-lightning-charge me-1"></i> Interactividad añadida con JavaScript</h2>
+    <p class="text-muted small">Además de los componentes visuales, la interfaz incorpora comportamiento real construido con JavaScript, manteniendo el mismo sistema de diseño (Evidencia GA6-220501096-AA4-EV03).</p>
+    <div class="usab-item">
+      <i class="bi bi-moon-stars"></i>
+      <div><h6>Modo oscuro</h6><p>Botón disponible en la barra superior de cada pantalla (y en el login) que alterna entre tema claro y oscuro, reutilizando las mismas variables de color. La preferencia se recuerda entre pantallas.</p></div>
+    </div>
+    <div class="usab-item">
+      <i class="bi bi-search"></i>
+      <div><h6>Búsqueda y filtrado en vivo</h6><p>Los listados de Usuarios y Documentos se filtran en tiempo real a medida que se escribe, sin recargar la página; Documentos además permite combinar la búsqueda con un filtro por categoría.</p></div>
+    </div>
+    <div class="usab-item">
+      <i class="bi bi-ui-checks"></i>
+      <div><h6>Validación de formularios</h6><p>Los formularios de inicio de sesión, perfil, nuevo usuario y nuevo documento validan los campos obligatorios y el formato de correo antes de continuar, señalando el error directamente sobre el campo.</p></div>
+    </div>
+    <div class="usab-item">
+      <i class="bi bi-window-stack"></i>
+      <div><h6>Paneles modales</h6><p>Las acciones "Nuevo usuario" y "Subir documento" abren un panel modal propio, sin salir de la pantalla actual, y agregan el nuevo registro a la tabla correspondiente.</p></div>
+    </div>
+    <div class="usab-item">
+      <i class="bi bi-bell"></i>
+      <div><h6>Notificaciones flotantes (toast)</h6><p>Cada acción relevante (guardar, crear, eliminar, iniciar sesión) muestra una notificación temporal confirmando el resultado, reforzando la retroalimentación inmediata al usuario.</p></div>
+    </div>
+  </div>
+
+  <p class="text-center text-muted small">InfoManager System · Guía de estilos de la interfaz gráfica · Evidencia GA6-220501096-AA4-EV03</p>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
