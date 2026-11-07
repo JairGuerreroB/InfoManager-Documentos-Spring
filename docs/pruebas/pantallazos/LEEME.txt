@@ -1,0 +1,5 @@
+Guarde aquí los pantallazos en formato PNG con el nombre de la prueba, por ejemplo:
+  CP-01.png, CP-02.png, ... CP-17.png   (pruebas funcionales)
+  CP-V01.png, CP-V02.png, ... CP-V23.png (pruebas de validación)
+Luego ejecute en la carpeta docs/pruebas:  npm install   (solo la primera vez)  y  node generar.mjs
+El documento se crea como Documento_Pruebas_AA3_EV02.docx. Las pruebas sin pantallazo quedan con un recuadro vacío.

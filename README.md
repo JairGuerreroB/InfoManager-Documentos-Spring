@@ -12,11 +12,12 @@ Aprendiz: Jair Guerrero · Ficha 3336142 · Instructor: Juan Hernández.
 | Framework | Dónde se aplica |
 |---|---|
 | **Spring Boot / Spring MVC** | `@SpringBootApplication` inicia Tomcat integrado; `@RestController` expone la API; `@Service` contiene las reglas; inyección de dependencias por constructor; `@RestControllerAdvice` centraliza los errores |
+| **React (JSX)** | La pantalla de Documentos está hecha con componentes React en la carpeta `frontend/` (Vite): estado con hooks (`useState`, `useEffect`), componentes reutilizables, formularios controlados y validaciones. Consume la API de Spring Boot. Ver `frontend/README.md` |
 | **Spring Data JPA** | Repositorios (`DocumentoRepositorio`, ...) sin escribir SQL para las operaciones básicas; consultas propias con `@Query` |
 | **Hibernate (JPA)** | Entidades `Documento`, `CategoriaDocumento` y `Usuario` mapeadas a las tablas de MySQL con `@Entity`, `@Table`, `@Column`, `@ManyToOne(fetch = LAZY)`, `@EntityGraph`, `@Convert` (estado ENUM), `@PrePersist` e `@Immutable`. Con `spring.jpa.show-sql=true` la consola muestra el SQL que genera Hibernate |
 
-El front end (HTML, CSS, JavaScript y Bootstrap 5) ya existía como prototipo; en este módulo la pantalla
-**Documentos** y el **Panel** quedan conectados a la API real. Las demás pantallas siguen con datos de ejemplo
+El front end (HTML, CSS y Bootstrap 5) existía como prototipo. La pantalla **Documentos** se reescribió con
+**React (JSX)** y el **Panel** muestra cifras reales de la API. Las demás pantallas siguen con datos de ejemplo
 hasta que se desarrolle su módulo.
 
 ## Funcionalidades
@@ -55,6 +56,18 @@ Para detener la aplicación, use el botón de parar del IDE o `Ctrl + C` en la t
 
 > Abra siempre las pantallas desde `http://localhost:8080/`. Si abre el HTML con doble clic, el navegador
 > no puede llegar a la API.
+
+### Desarrollo del front end (React)
+
+La pantalla de documentos ya viene compilada dentro de `src/main/resources/static`, así que **no hace falta Node**
+para ejecutarla. Para ver o modificar el código React:
+
+```
+cd frontend
+npm install        (solo la primera vez)
+npm run dev        (abre http://localhost:5173/documentos.html con Spring Boot en ejecución)
+npm run build      (genera de nuevo la versión que sirve Spring Boot)
+```
 
 ## Antes de probar: aviso para quien evalúe el módulo
 
@@ -117,7 +130,8 @@ Los errores se devuelven como `{"mensaje": "..."}` con el código HTTP correspon
 InfoManager-Documentos-Spring/
 ├── pom.xml
 ├── database/            Scripts SQL (01, 02 y 03)
-├── docs/                Artefactos del proyecto (diagramas y documento)
+├── docs/                Artefactos del proyecto y pruebas (docs/pruebas genera el documento de la AA3-EV02)
+├── frontend/            Pantalla de documentos en React (JSX) con Vite
 └── src/
     ├── main/java/co/edu/sena/infomanager/
     │   ├── InfoManagerApplication.java
@@ -131,7 +145,7 @@ InfoManager-Documentos-Spring/
     ├── main/resources/
     │   ├── application.properties
     │   ├── local.properties.example
-    │   └── static/         Front end (HTML, CSS, JavaScript y Bootstrap)
+    │   └── static/         Pantallas del prototipo y la versión compilada de React
     └── test/java/          Pruebas unitarias
 ```
 

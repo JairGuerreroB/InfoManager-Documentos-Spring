@@ -18,3 +18,7 @@ nbproject/private/
 .DS_Store
 Thumbs.db
 *.log
+
+# Dependencias de Node del generador del documento de pruebas
+docs/pruebas/node_modules/
+docs/pruebas/package-lock.json

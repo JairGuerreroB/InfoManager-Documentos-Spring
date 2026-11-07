@@ -1,0 +1,9 @@
+{
+  "name": "generador-documento-pruebas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Genera el documento Word de pruebas (AA3-EV02) e inserta los pantallazos de la carpeta pantallazos/.",
+  "scripts": { "generar": "node generar.mjs" },
+  "dependencies": { "docx": "^9.0.0" }
+}
