@@ -4,13 +4,12 @@ import { EXTENSIONES_PERMITIDAS, TAMANO_MAXIMO, extensionDe } from '../utilidade
 // Valores iniciales del formulario: vacío para subir, o los datos del documento para editarlo.
 function valoresIniciales(documento) {
   if (!documento) {
-    return { titulo: '', descripcion: '', idCategoria: '', idUsuario: '', fechaVencimiento: '', estado: 'activo' };
+    return { titulo: '', descripcion: '', idCategoria: '', fechaVencimiento: '', estado: 'activo' };
   }
   return {
     titulo: documento.titulo,
     descripcion: documento.descripcion || '',
     idCategoria: String(documento.idCategoria),
-    idUsuario: '',
     fechaVencimiento: documento.fechaVencimiento || '',
     estado: documento.estado
   };
@@ -26,9 +25,6 @@ function validar(valores, archivo, edicion) {
     errores.idCategoria = 'Seleccione una categoría.';
   }
   if (!edicion) {
-    if (!valores.idUsuario) {
-      errores.idUsuario = 'Seleccione quién sube el documento.';
-    }
     if (!archivo) {
       errores.archivo = 'Seleccione el archivo.';
     } else if (!EXTENSIONES_PERMITIDAS.includes(extensionDe(archivo.name))) {
@@ -48,7 +44,8 @@ function MensajeError({ mensaje }) {
 }
 
 // Panel modal para subir un documento nuevo (documento = null) o editar uno existente.
-export default function ModalDocumento({ documento, categorias, usuarios, onCerrar, onGuardar }) {
+// Quien sube el documento es el usuario que inició sesión, por eso ya no se elige en el formulario.
+export default function ModalDocumento({ documento, categorias, onCerrar, onGuardar }) {
   const edicion = documento !== null;
   const [valores, setValores] = useState(() => valoresIniciales(documento));
   const [archivo, setArchivo] = useState(null);
@@ -117,20 +114,6 @@ export default function ModalDocumento({ documento, categorias, usuarios, onCerr
 
           {!edicion && (
             <>
-              <div className="mb-3">
-                <label className="form-label small fw-semibold" htmlFor="docUsuario">Subido por</label>
-                <select id="docUsuario" className={'form-select' + (errores.idUsuario ? ' is-invalid' : '')}
-                        value={valores.idUsuario} onChange={(e) => cambiar('idUsuario', e.target.value)}>
-                  <option value="">
-                    {usuarios.length ? 'Seleccione un usuario' : 'No hay usuarios registrados'}
-                  </option>
-                  {usuarios.map((usuario) => (
-                    <option key={usuario.id} value={usuario.id}>{usuario.nombre}</option>
-                  ))}
-                </select>
-                <MensajeError mensaje={errores.idUsuario} />
-              </div>
-
               <div className="mb-3">
                 <label className="form-label small fw-semibold" htmlFor="docArchivo">Archivo (máximo 10 MB)</label>
                 <input type="file" id="docArchivo"

@@ -25,14 +25,29 @@ async function pedir(ruta, opciones) {
   return respuesta.status === 204 ? null : respuesta.json();
 }
 
+// ---- Sesión ----
+
+// Valida el correo y la contraseña; devuelve { idUsuario, nombre, apellido, correo, rol }.
+export const iniciarSesion = (correo, contrasena) =>
+  pedir('/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ correo, contrasena })
+  });
+
+// ---- Documentos ----
+
 // Lista documentos; los filtros vacíos no se envían.
-export function listarDocumentos({ texto, idCategoria, vigencia }) {
+export function listarDocumentos({ texto, idCategoria, vigencia } = {}) {
   const parametros = new URLSearchParams();
   if (texto && texto.trim()) parametros.set('texto', texto.trim());
   if (idCategoria) parametros.set('idCategoria', idCategoria);
   if (vigencia) parametros.set('vigencia', vigencia);
   return pedir('/documentos?' + parametros.toString());
 }
+
+// Totales del panel: total, activos, archivados, por vencer y vencidos.
+export const obtenerResumen = () => pedir('/documentos/resumen');
 
 export const listarCategorias = () => pedir('/categorias');
 export const listarUsuarios = () => pedir('/usuarios');

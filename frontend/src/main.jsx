@@ -1,8 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import PaginaDocumentos from './PaginaDocumentos.jsx';
+import App from './App.jsx';
+import { AuthProvider } from './contexto/AuthContext.jsx';
 
-// Restaura el tema (claro u oscuro) elegido en las demás pantallas
+// Restaura el tema (claro u oscuro) elegido antes
 try {
   if (localStorage.getItem('im-theme') === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
@@ -13,6 +14,9 @@ try {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <PaginaDocumentos />
+    {/* El proveedor de sesión envuelve toda la aplicación para que cualquier componente conozca al usuario */}
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </StrictMode>
 );

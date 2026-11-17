@@ -4,9 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 const raiz = fileURLToPath(new URL('.', import.meta.url));
 
-// Páginas del prototipo que sirve Spring Boot: en desarrollo se reenvían al puerto 8080
-// para que el menú lateral siga funcionando desde http://localhost:5173
-const paginasEstaticas = '^/(dashboard|usuarios|reportes|perfil|login|guia_estilos)\\.html$';
+// Pantallas del prototipo que aún sirve Spring Boot: en desarrollo se reenvían al puerto 8080
+const prototipos = '^/(usuarios|reportes|perfil|guia_estilos)\\.html$';
 
 export default defineConfig({
   plugins: [react()],
@@ -15,16 +14,16 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:8080',
       '/assets/style.css': 'http://localhost:8080',
-      [paginasEstaticas]: 'http://localhost:8080'
+      [prototipos]: 'http://localhost:8080'
     }
   },
   build: {
-    // El resultado se escribe dentro de Spring Boot: reemplaza static/documentos.html
+    // El resultado se escribe dentro de Spring Boot: reemplaza static/index.html
     outDir: fileURLToPath(new URL('../src/main/resources/static', import.meta.url)),
-    emptyOutDir: false, // no borrar las demás pantallas del prototipo
+    emptyOutDir: false, // no borrar las pantallas del prototipo
     rollupOptions: {
-      input: raiz + 'documentos.html',
-      output: { entryFileNames: 'assets/documentos-react.js' }
+      input: raiz + 'index.html',
+      output: { entryFileNames: 'assets/app-react.js' }
     }
   }
 });

@@ -1,9 +1,10 @@
 import Vencimiento from './Vencimiento.jsx';
+import EstadoVacio from './EstadoVacio.jsx';
 import { formatearFecha, iconoArchivo } from '../utilidades.js';
 import { urlArchivo } from '../api.js';
 
-// Una fila de la tabla: datos del documento y sus acciones (descargar, editar, eliminar).
-function FilaDocumento({ documento, onEditar, onEliminar }) {
+// Una fila de la tabla: datos del documento y sus acciones (descargar, editar y, si el rol lo permite, eliminar).
+function FilaDocumento({ documento, puedeEliminar, onEditar, onEliminar }) {
   const icono = iconoArchivo(documento.extension);
   const activo = documento.estado === 'activo';
 
@@ -32,17 +33,20 @@ function FilaDocumento({ documento, onEditar, onEliminar }) {
                 title="Editar" aria-label="Editar documento" onClick={() => onEditar(documento)}>
           <i className="bi bi-pencil" style={{ color: '#2E5C8A' }}></i>
         </button>
-        <button type="button" className="btn p-0 border-0 bg-transparent action-icon"
-                title="Eliminar" aria-label="Eliminar documento" onClick={() => onEliminar(documento)}>
-          <i className="bi bi-trash" style={{ color: '#DC3545' }}></i>
-        </button>
+        {/* Solo el Administrador puede eliminar documentos (HU-D08) */}
+        {puedeEliminar && (
+          <button type="button" className="btn p-0 border-0 bg-transparent action-icon"
+                  title="Eliminar" aria-label="Eliminar documento" onClick={() => onEliminar(documento)}>
+            <i className="bi bi-trash" style={{ color: '#DC3545' }}></i>
+          </button>
+        )}
       </td>
     </tr>
   );
 }
 
 // Tabla de documentos. Si no hay resultados muestra un aviso en lugar de filas.
-export default function TablaDocumentos({ documentos, cargando, onEditar, onEliminar }) {
+export default function TablaDocumentos({ documentos, cargando, puedeEliminar, onEditar, onEliminar }) {
   return (
     <>
       <div className="table-responsive">
@@ -55,18 +59,13 @@ export default function TablaDocumentos({ documentos, cargando, onEditar, onElim
           </thead>
           <tbody>
             {documentos.map((documento) => (
-              <FilaDocumento key={documento.idDocumento} documento={documento}
+              <FilaDocumento key={documento.idDocumento} documento={documento} puedeEliminar={puedeEliminar}
                              onEditar={onEditar} onEliminar={onEliminar} />
             ))}
           </tbody>
         </table>
       </div>
-      {!cargando && documentos.length === 0 && (
-        <div className="empty-state show">
-          <i className="bi bi-search"></i>
-          No hay documentos para mostrar.
-        </div>
-      )}
+      {!cargando && documentos.length === 0 && <EstadoVacio mensaje="No hay documentos para mostrar." />}
     </>
   );
 }

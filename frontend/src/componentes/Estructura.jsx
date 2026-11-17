@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
+import { Enlace, navegar, useRuta } from '../enrutador/enrutador.jsx';
+import { useAuth } from '../contexto/AuthContext.jsx';
+import { useTema } from '../ganchos/useTema.js';
+import { MENU } from '../rutas.js';
 
-const ENLACES = [
-  { href: 'dashboard.html', icono: 'bi-house-door', texto: 'Panel' },
-  { href: 'usuarios.html', icono: 'bi-people', texto: 'Usuarios' },
-  { href: 'documentos.html', icono: 'bi-file-earmark-text', texto: 'Documentos', activo: true },
-  { href: 'reportes.html', icono: 'bi-bar-chart', texto: 'Reportes' },
-  { href: 'perfil.html', icono: 'bi-person-circle', texto: 'Perfil' }
-];
+// Iniciales para el avatar: "Ana Martínez" -> "AM"
+function iniciales(usuario) {
+  return (usuario.nombre.charAt(0) + usuario.apellido.charAt(0)).toUpperCase();
+}
 
-// Estructura común de las pantallas: menú lateral, barra superior y el contenido de la página.
+// Estructura común de las pantallas internas: menú lateral, barra superior y el contenido de la página.
+// El menú solo muestra las opciones que el rol del usuario puede usar.
 export default function Estructura({ titulo, children }) {
+  const { usuario, cerrarSesion } = useAuth();
+  const { oscuro, alternarTema } = useTema();
+  const ruta = useRuta();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [menuUsuario, setMenuUsuario] = useState(false);
-  const [hayNotificaciones, setHayNotificaciones] = useState(true);
-  const [oscuro, setOscuro] = useState(
-    () => document.documentElement.getAttribute('data-theme') === 'dark'
-  );
 
   // El menú de usuario se cierra al hacer clic en cualquier otro lugar
   useEffect(() => {
@@ -24,38 +25,30 @@ export default function Estructura({ titulo, children }) {
     return () => document.removeEventListener('click', cerrar);
   }, []);
 
-  // Alterna el tema claro/oscuro y lo recuerda para las demás pantallas
-  function alternarTema() {
-    const nuevoOscuro = !oscuro;
-    if (nuevoOscuro) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-    try {
-      localStorage.setItem('im-theme', nuevoOscuro ? 'dark' : 'light');
-    } catch (e) {
-      // almacenamiento no disponible
-    }
-    setOscuro(nuevoOscuro);
+  const opciones = MENU.filter((opcion) => opcion.roles.includes(usuario.rol));
+
+  function salir(evento) {
+    evento.preventDefault();
+    cerrarSesion();
+    navegar('/login');
   }
 
   return (
     <div className="im-shell">
       <aside className={'im-sidebar' + (menuAbierto ? ' open' : '')}>
         <div className="brand"><i className="bi bi-diagram-3-fill"></i> InfoManager</div>
-        {ENLACES.map((enlace) => (
-          <a key={enlace.href} href={enlace.href}
-             className={'nav-item' + (enlace.activo ? ' active' : '')}
-             onClick={() => setMenuAbierto(false)}>
-            <i className={'bi ' + enlace.icono}></i> {enlace.texto}
-          </a>
+        {opciones.map((opcion) => (
+          <Enlace key={opcion.ruta} a={opcion.ruta}
+                  className={'nav-item' + (ruta === opcion.ruta ? ' active' : '')}
+                  onClick={() => setMenuAbierto(false)}>
+            <i className={'bi ' + opcion.icono}></i> {opcion.texto}
+          </Enlace>
         ))}
         <div className="nav-footer">
-          <a href="guia_estilos.html" className="nav-item" style={{ paddingLeft: 0 }}>
+          <a href="/guia_estilos.html" className="nav-item" style={{ paddingLeft: 0 }}>
             <i className="bi bi-palette2"></i> Guía de estilos
           </a>
-          <a href="login.html" className="nav-item" style={{ paddingLeft: 0 }}>
+          <a href="#/login" className="nav-item" style={{ paddingLeft: 0 }} onClick={salir}>
             <i className="bi bi-box-arrow-right"></i> Cerrar sesión
           </a>
         </div>
@@ -72,20 +65,15 @@ export default function Estructura({ titulo, children }) {
                     onClick={alternarTema}>
               <i className={'bi ' + (oscuro ? 'bi-sun' : 'bi-moon-stars')}></i>
             </button>
-            <div className="im-notif" title="Notificaciones" onClick={() => setHayNotificaciones(false)}>
-              <i className="bi bi-bell"></i>
-              {hayNotificaciones && <span className="dot">3</span>}
-            </div>
             <div className="im-user-menu">
               <div className="user-chip" onClick={(e) => { e.stopPropagation(); setMenuUsuario(!menuUsuario); }}>
-                <span className="text-muted">Ana Martínez · Administradora</span>
-                <div className="avatar">AM</div>
+                <span className="text-muted">{usuario.nombre} {usuario.apellido} · {usuario.rol}</span>
+                <div className="avatar">{iniciales(usuario)}</div>
               </div>
               <div className={'user-dropdown' + (menuUsuario ? ' show' : '')}>
-                <a href="perfil.html"><i className="bi bi-person"></i> Ver perfil</a>
-                <a href="#"><i className="bi bi-gear"></i> Configuración</a>
+                <Enlace a="/perfil"><i className="bi bi-person"></i> Ver perfil</Enlace>
                 <hr />
-                <a href="login.html"><i className="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+                <a href="#/login" onClick={salir}><i className="bi bi-box-arrow-right"></i> Cerrar sesión</a>
               </div>
             </div>
           </div>

@@ -1,21 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
-import Estructura from './componentes/Estructura.jsx';
-import FiltrosDocumentos from './componentes/FiltrosDocumentos.jsx';
-import TablaDocumentos from './componentes/TablaDocumentos.jsx';
-import ModalDocumento from './componentes/ModalDocumento.jsx';
-import PilaAvisos from './componentes/PilaAvisos.jsx';
-import { useAvisos } from './ganchos/useAvisos.js';
-import { useRetraso } from './ganchos/useRetraso.js';
+import FiltrosDocumentos from '../componentes/FiltrosDocumentos.jsx';
+import TablaDocumentos from '../componentes/TablaDocumentos.jsx';
+import ModalDocumento from '../componentes/ModalDocumento.jsx';
+import PilaAvisos from '../componentes/PilaAvisos.jsx';
+import { Enlace } from '../enrutador/enrutador.jsx';
+import { useAuth } from '../contexto/AuthContext.jsx';
+import { useAvisos } from '../ganchos/useAvisos.js';
+import { useRetraso } from '../ganchos/useRetraso.js';
+import { ADMINISTRADOR } from '../rutas.js';
 import {
   actualizarDocumento, eliminarDocumento, listarCategorias,
-  listarDocumentos, listarUsuarios, subirDocumento
-} from './api.js';
+  listarDocumentos, subirDocumento
+} from '../api.js';
 
-// Componente principal: guarda el estado de la pantalla y coordina la tabla, los filtros y el formulario.
+// Pantalla de documentos: guarda el estado y coordina la tabla, los filtros y el formulario.
 export default function PaginaDocumentos() {
+  const { usuario } = useAuth();
+  const esAdministrador = usuario.rol === ADMINISTRADOR;
+
   const [documentos, setDocumentos] = useState([]);
   const [categorias, setCategorias] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
   const [filtros, setFiltros] = useState({ texto: '', idCategoria: '', vigencia: '' });
   const [modal, setModal] = useState({ abierto: false, documento: null });
   const [cargando, setCargando] = useState(true);
@@ -24,13 +28,10 @@ export default function PaginaDocumentos() {
   // La búsqueda por texto espera 300 ms tras la última tecla antes de consultar
   const textoRetrasado = useRetraso(filtros.texto, 300);
 
-  // Las listas desplegables se cargan una sola vez, al abrir la pantalla
+  // La lista de categorías se carga una sola vez, al abrir la pantalla
   useEffect(() => {
-    Promise.all([listarCategorias(), listarUsuarios()])
-      .then(([listaCategorias, listaUsuarios]) => {
-        setCategorias(listaCategorias);
-        setUsuarios(listaUsuarios);
-      })
+    listarCategorias()
+      .then(setCategorias)
       .catch((e) => avisar(e.message, 'danger'));
   }, [avisar]);
 
@@ -67,7 +68,7 @@ export default function PaginaDocumentos() {
         datos.append('titulo', valores.titulo.trim());
         datos.append('descripcion', valores.descripcion.trim());
         datos.append('idCategoria', valores.idCategoria);
-        datos.append('idUsuario', valores.idUsuario);
+        datos.append('idUsuario', usuario.idUsuario); // quien sube es el usuario con sesión iniciada
         if (valores.fechaVencimiento) datos.append('fechaVencimiento', valores.fechaVencimiento);
         datos.append('archivo', archivo);
         await subirDocumento(datos);
@@ -103,27 +104,30 @@ export default function PaginaDocumentos() {
   }
 
   return (
-    <Estructura titulo="Gestión de documentos">
-      <nav className="im-breadcrumb">
-        <a href="dashboard.html">Panel administrativo</a>
-        <span className="sep">/</span>
-        <span className="current">Documentos</span>
-      </nav>
+    <>
+      {/* La ruta hacia el panel solo existe para el Administrador */}
+      {esAdministrador && (
+        <nav className="im-breadcrumb">
+          <Enlace a="/panel">Panel administrativo</Enlace>
+          <span className="sep">/</span>
+          <span className="current">Documentos</span>
+        </nav>
+      )}
 
       <div className="block">
         <FiltrosDocumentos categorias={categorias} filtros={filtros} onCambiar={cambiarFiltro}
                            onSubir={() => setModal({ abierto: true, documento: null })} />
-        <TablaDocumentos documentos={documentos} cargando={cargando}
+        <TablaDocumentos documentos={documentos} cargando={cargando} puedeEliminar={esAdministrador}
                          onEditar={(documento) => setModal({ abierto: true, documento })}
                          onEliminar={eliminar} />
       </div>
 
       {modal.abierto && (
         <ModalDocumento key={modal.documento ? modal.documento.idDocumento : 'nuevo'}
-                        documento={modal.documento} categorias={categorias} usuarios={usuarios}
+                        documento={modal.documento} categorias={categorias}
                         onCerrar={cerrarModal} onGuardar={guardar} />
       )}
       <PilaAvisos avisos={avisos} />
-    </Estructura>
+    </>
   );
 }
