@@ -32,6 +32,11 @@ public class ManejadorErrores {
                 "Los datos enviados no son válidos. Revise los campos e inténtelo de nuevo.");
     }
 
+    @ExceptionHandler(CredencialesInvalidasException.class)
+    public ResponseEntity<ErrorRespuesta> alFallarElInicioDeSesion(CredencialesInvalidasException e) {
+        return responder(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ResponseEntity<ErrorRespuesta> alNoEncontrar(RecursoNoEncontradoException e) {
         return responder(HttpStatus.NOT_FOUND, e.getMessage());
